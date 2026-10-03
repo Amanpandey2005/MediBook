@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(content=~{::content})}">
+<head>
+    <title>Appointment Details - MediBook</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <div class="container py-4">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-lg-3">
+                    <div class="sidebar">
+                        <h5 class="mb-3">Doctor Dashboard</h5>
+                        <nav class="nav flex-column">
+                            <a class="nav-link" href="/doctor/dashboard">
+                                <i class="fas fa-tachometer-alt"></i> Dashboard
+                            </a>
+                            <a class="nav-link active" href="/doctor/appointments">
+                                <i class="fas fa-calendar-check"></i> Appointments
+                            </a>
+                            <a class="nav-link" href="/doctor/medications">
+                                <i class="fas fa-pills"></i> Medications
+                            </a>
+                        </nav>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="col-lg-9">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2>Appointment Details</h2>
+                        <a href="/doctor/appointments" class="btn btn-outline-primary">
+                            <i class="fas fa-arrow-left"></i> Back to Appointments
+                        </a>
+                    </div>
+
+                    <div th:if="${param.success}" class="alert alert-success">
+                        <i class="fas fa-check-circle"></i> Medication prescribed successfully!
+                    </div>
+
+                    <div th:if="${param.error}" class="alert alert-danger">
+                        <i class="fas fa-exclamation-circle"></i> <span th:text="${param.error}">Error occurred</span>
+                    </div>
+
+                    <!-- Patient Information -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-user text-primary"></i> Patient Information
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>Name:</strong> <span th:text="${appointment.patient.fullName}">John Doe</span></p>
+                                    <p><strong>Email:</strong> <span th:text="${appointment.patient.email}">john.doe@email.com</span></p>
+                                    <p><strong>Phone:</strong> <span th:text="${appointment.patient.phoneNumber}">+1 (555) 123-4567</span></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Appointment Date:</strong> <span th:text="${#temporals.format(appointment.appointmentDateTime, 'MMM dd, yyyy')}">Jan 15, 2024</span></p>
+                                    <p><strong>Appointment Time:</strong> <span th:text="${#temporals.format(appointment.appointmentDateTime, 'HH:mm')}">10:00</span></p>
+                                    <p><strong>Status:</strong> 
+                                        <span th:switch="${appointment.status.name()}" class="badge">
+                                            <span th:case="SCHEDULED" class="badge bg-warning">Scheduled</span>
+                                            <span th:case="CONFIRMED" class="badge bg-success">Confirmed</span>
+                                            <span th:case="IN_PROGRESS" class="badge bg-info">In Progress</span>
+                                            <span th:case="COMPLETED" class="badge bg-secondary">Completed</span>
+                                            <span th:case="CANCELLED" class="badge bg-danger">Cancelled</span>
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Appointment Details -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-clipboard-list text-primary"></i> Appointment Details
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Reason for Visit:</strong></p>
+                            <p th:text="${appointment.reasonForVisit}">Patient experiencing chest pain and shortness of breath.</p>
+                            
+                            <div th:if="${appointment.symptoms}">
+                                <p class="mt-3"><strong>Symptoms:</strong></p>
+                                <p th:text="${appointment.symptoms}">Chest pain, shortness of breath, fatigue</p>
+                            </div>
+
+                            <div th:if="${appointment.notes}">
+                                <p class="mt-3"><strong>Doctor's Notes:</strong></p>
+                                <p th:text="${appointment.notes}">Patient appears stable, vital signs normal.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Complete Appointment -->
+                    <div th:if="${appointment.status.name() != 'COMPLETED'}" class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-check-circle text-primary"></i> Complete Appointment
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <form th:action="@{/doctor/appointment/{id}/complete(id=${appointment.id})}" method="post">
+                                <div class="mb-3">
+                                    <label for="notes" class="form-label">Doctor's Notes</label>
+                                    <textarea class="form-control" id="notes" name="notes" rows="4" 
+                                              placeholder="Enter your notes about the appointment, diagnosis, and treatment plan..."></textarea>
+                                </div>
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="fas fa-check"></i> Complete Appointment
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Prescribe Medication -->
+                    <div th:if="${appointment.status.name() == 'COMPLETED'}" class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-pills text-primary"></i> Prescribe Medication
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <form th:action="@{/doctor/prescribe-medication}" method="post">
+                                <input type="hidden" name="appointmentId" th:value="${appointment.id}">
+                                
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="medicationName" class="form-label">Medication Name</label>
+                                            <input type="text" class="form-control" id="medicationName" name="medicationName" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="dosage" class="form-label">Dosage</label>
+                                            <input type="text" class="form-control" id="dosage" name="dosage" 
+                                                   placeholder="e.g., 100mg, 2 tablets" required>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="frequency" class="form-label">Frequency</label>
+                                            <input type="text" class="form-control" id="frequency" name="frequency" 
+                                                   placeholder="e.g., Twice daily, Every 8 hours" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="durationDays" class="form-label">Duration (Days)</label>
+                                            <input type="number" class="form-control" id="durationDays" name="durationDays" 
+                                                   min="1" required>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="instructions" class="form-label">Instructions</label>
+                                    <textarea class="form-control" id="instructions" name="instructions" rows="3" 
+                                              placeholder="Special instructions for taking the medication..."></textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="sideEffects" class="form-label">Possible Side Effects</label>
+                                    <textarea class="form-control" id="sideEffects" name="sideEffects" rows="2" 
+                                              placeholder="Common side effects to watch for..."></textarea>
+                                </div>
+
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-pills"></i> Prescribe Medication
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

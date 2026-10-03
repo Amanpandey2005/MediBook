@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::body})}">
+<head>
+    <title>Contact Us - MediBook</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-8">
+                        <h1 class="display-4 fw-bold mb-4">Contact Us</h1>
+                        <p class="lead">We're here to help. Get in touch with our team for any questions or support.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Content -->
+        <section class="py-5">
+            <div class="container">
+                <div class="row g-5">
+                    <div class="col-lg-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="mb-0">
+                                    <i class="fas fa-envelope text-primary"></i> Send us a Message
+                                </h3>
+                            </div>
+                            <div class="card-body p-4">
+                                <div th:if="${param.success}" class="alert alert-success">
+                                    <i class="fas fa-check-circle"></i> Thank you for your feedback! We'll get back to you soon.
+                                </div>
+                                <div th:if="${error}" class="alert alert-danger">
+                                    <i class="fas fa-exclamation-circle"></i> <span th:text="${error}"></span>
+                                </div>
+                                
+                                <form th:action="@{/contact}" method="post">
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="firstName" class="form-label">First Name</label>
+                                                <input type="text" class="form-control" id="firstName" name="firstName" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="lastName" class="form-label">Last Name</label>
+                                                <input type="text" class="form-control" id="lastName" name="lastName" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Email Address</label>
+                                        <input type="email" class="form-control" id="email" name="email" required>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="subject" class="form-label">Subject</label>
+                                        <input type="text" class="form-control" id="subject" name="subject" required>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="message" class="form-label">Message</label>
+                                        <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+                                    </div>
+                                    
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-paper-plane"></i> Send Message
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="mb-0">
+                                    <i class="fas fa-info-circle text-primary"></i> Contact Information
+                                </h3>
+                            </div>
+                            <div class="card-body p-4">
+                                <div class="mb-4">
+                                    <h5><i class="fas fa-map-marker-alt text-primary"></i> Address</h5>
+                                    <p class="mb-0">Mustek Limited<br>
+                                        322 15th Rd, Randjespark<br>
+                                        Midrand, 1685</p>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <h5><i class="fas fa-phone text-primary"></i> Phone</h5>
+                                    <p class="mb-0">
+                                        <a href="tel:+15551234567" class="text-decoration-none">+1 (555) 123-4567</a><br>
+                                        <small class="text-muted">Mon-Fri: 8:00 AM - 6:00 PM</small>
+                                    </p>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <h5><i class="fas fa-envelope text-primary"></i> Email</h5>
+                                    <p class="mb-0">
+                                        <a href="mailto:mecergroup4@gmail.com" class="text-decoration-none">mecergroup4@gmail.com</a><br>
+                                    </p>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <h5><i class="fas fa-clock text-primary"></i> Business Hours</h5>
+                                    <p class="mb-0">
+                                        Monday - Friday: 8:00 AM - 6:00 PM<br>
+                                        Saturday: 9:00 AM - 4:00 PM<br>
+                                        Sunday: Closed<br>
+                                        <small class="text-muted">Emergency services available 24/7</small>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card mt-4">
+                            <div class="card-header">
+                                <h3 class="mb-0">
+                                    <i class="fas fa-headset text-primary"></i> Quick Support
+                                </h3>
+                            </div>
+                            <div class="card-body p-4">
+                                <div class="d-grid gap-2">
+                                    <a href="/patient/book-appointment" class="btn btn-outline-primary">
+                                        <i class="fas fa-calendar-plus"></i> Book Appointment
+                                    </a>
+                                    <a href="/patient/ai-recommendation" class="btn btn-outline-primary">
+                                        <i class="fas fa-robot"></i> Get Doctor Recommendation
+                                    </a>
+                                    <a href="tel:+15551234567" class="btn btn-outline-primary">
+                                        <i class="fas fa-phone"></i> Call Now
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="py-5" style="background-color: var(--lighter-blue);">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <h2 class="text-center mb-5">Frequently Asked Questions</h2>
+                        <div class="accordion" id="faqAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="faq1">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1">
+                                        How do I book an appointment?
+                                    </button>
+                                </h2>
+                                <div id="collapse1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        Simply register for an account, log in, and use our appointment booking system. You can choose your preferred doctor and available time slot.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="faq2">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2">
+                                        How does the AI recommendation work?
+                                    </button>
+                                </h2>
+                                <div id="collapse2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        Our AI analyzes your symptoms and medical history to recommend the most suitable doctors based on their specialization and expertise.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="faq3">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3">
+                                        Is my medical information secure?
+                                    </button>
+                                </h2>
+                                <div id="collapse3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        Yes, we use enterprise-grade security measures to protect your medical information and ensure HIPAA compliance.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="faq4">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4">
+                                        Can I cancel or reschedule my appointment?
+                                    </button>
+                                </h2>
+                                <div id="collapse4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        Yes, you can cancel or reschedule your appointment through your dashboard. Please provide at least 24 hours notice for cancellations.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

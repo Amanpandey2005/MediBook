@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::body})}">
+<head>
+    <title>Patient Dashboard - MediBook</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <div class="container py-4">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-lg-3">
+                    <div class="sidebar">
+                        <h5 class="mb-3">Patient Dashboard</h5>
+                        <nav class="nav flex-column">
+                            <a class="nav-link active" href="/patient/dashboard">
+                                <i class="fas fa-tachometer-alt"></i> Dashboard
+                            </a>
+                            <a class="nav-link" href="/patient/book-appointment">
+                                <i class="fas fa-calendar-plus"></i> Book Appointment
+                            </a>
+                            <a class="nav-link" href="/patient/ai-recommendation">
+                                <i class="fas fa-robot"></i> AI Recommendations
+                            </a>
+                            <a class="nav-link" href="/patient/appointments">
+                                <i class="fas fa-calendar-check"></i> My Appointments
+                            </a>
+                            <a class="nav-link" href="/patient/medications">
+                                <i class="fas fa-pills"></i> My Medications
+                            </a>
+                        </nav>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="col-lg-9">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2>Welcome, <span th:text="${patient.firstName}">Patient</span>!</h2>
+                        <a href="/patient/book-appointment" class="btn btn-primary">
+                            <i class="fas fa-calendar-plus"></i> Book New Appointment
+                        </a>
+                    </div>
+
+                    <!-- Success Messages -->
+                    <div th:if="${param.success}" class="alert alert-success">
+                        <i class="fas fa-check-circle"></i> Appointment booked successfully! You will receive a confirmation email shortly.
+                    </div>
+                    <div th:if="${param.loggedIn}" class="alert alert-success">
+                        <i class="fas fa-check-circle"></i> Logged in successfully. Welcome back!
+                    </div>
+
+                    <!-- Quick Stats -->
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <div class="card stats-card">
+                                <div class="card-body text-center">
+                                    <h3 class="text-primary" th:text="${appointments.size()}">0</h3>
+                                    <p class="text-muted mb-0">Total Appointments</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card stats-card">
+                                <div class="card-body text-center">
+                                    <h3 class="text-primary" th:text="${medications.size()}">0</h3>
+                                    <p class="text-muted mb-0">Active Medications</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card stats-card">
+                                <div class="card-body text-center">
+                                    <h3 class="text-primary">24/7</h3>
+                                    <p class="text-muted mb-0">Support Available</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Upcoming Appointments -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-calendar-check text-primary"></i> Upcoming Appointments
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div th:if="${appointments.isEmpty()}" class="text-center py-4">
+                                <i class="fas fa-calendar-times text-muted" style="font-size: 3rem;"></i>
+                                <p class="text-muted mt-3">No upcoming appointments</p>
+                                <a href="/patient/book-appointment" class="btn btn-primary">Book Your First Appointment</a>
+                            </div>
+                            <div th:if="${!appointments.isEmpty()}" class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Doctor</th>
+                                            <th>Specialization</th>
+                                            <th>Date & Time</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="appointment : ${appointments}">
+                                            <td th:text="${appointment.doctor.user.fullName}">Dr. John Smith</td>
+                                            <td th:text="${appointment.doctor.specialization}">Cardiology</td>
+                                            <td th:text="${#temporals.format(appointment.appointmentDateTime, 'MMM dd, yyyy HH:mm')}">Jan 15, 2024 10:00</td>
+                                            <td>
+                                                <span th:switch="${appointment.status}" class="badge">
+                                                    <span th:case="SCHEDULED" class="badge bg-warning">Scheduled</span>
+                                                    <span th:case="CONFIRMED" class="badge bg-success">Confirmed</span>
+                                                    <span th:case="IN_PROGRESS" class="badge bg-info">In Progress</span>
+                                                    <span th:case="COMPLETED" class="badge bg-secondary">Completed</span>
+                                                    <span th:case="CANCELLED" class="badge bg-danger">Cancelled</span>
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <div th:if="${appointment.status.name() == 'SCHEDULED' or appointment.status.name() == 'CONFIRMED'}">
+                                                    <a th:href="@{/patient/cancel-appointment/{id}(id=${appointment.id})}" 
+                                                       class="btn btn-sm btn-outline-danger"
+                                                       onclick="return confirm('Are you sure you want to cancel this appointment?')">
+                                                        <i class="fas fa-times"></i> Cancel
+                                                    </a>
+                                                </div>
+                                                <span th:if="${appointment.status.name() == 'CANCELLED'}" class="text-muted">
+                                                    <i class="fas fa-ban text-danger"></i> Cancelled
+                                                </span>
+
+                                                <!-- Completed status for completed appointments -->
+                                                <span th:if="${appointment.status.name() == 'COMPLETED'}" class="text-success">
+                                                    <i class="fas fa-check-circle"></i> Completed
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Current Medications -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-pills text-primary"></i> Current Medications
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div th:if="${medications.isEmpty()}" class="text-center py-4">
+                                <i class="fas fa-pills text-muted" style="font-size: 3rem;"></i>
+                                <p class="text-muted mt-3">No active medications</p>
+                            </div>
+                            <div th:if="${!medications.isEmpty()}" class="row">
+                                <div th:each="medication : ${medications}" class="col-md-6 mb-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h6 th:text="${medication.medicationName}">Medication Name</h6>
+                                            <p class="text-muted mb-1">
+                                                <strong>Dosage:</strong> <span th:text="${medication.dosage}">10mg</span>
+                                            </p>
+                                            <p class="text-muted mb-1">
+                                                <strong>Frequency:</strong> <span th:text="${medication.frequency}">Twice daily</span>
+                                            </p>
+                                            <p class="text-muted mb-0">
+                                                <strong>Duration:</strong> <span th:text="${medication.durationDays}">7</span> days
+                                            </p>
+                                            <div th:if="${medication.instructions}" class="mt-2">
+                                                <small class="text-muted">
+                                                    <strong>Instructions:</strong> <span th:text="${medication.instructions}">Take with food</span>
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

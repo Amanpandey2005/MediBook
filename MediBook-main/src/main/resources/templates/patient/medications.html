@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(content=~{::content})}">
+<head>
+    <title>My Medications - MediBook</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <div class="container py-4">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-lg-3">
+                    <div class="sidebar">
+                        <h5 class="mb-3">Patient Dashboard</h5>
+                        <nav class="nav flex-column">
+                            <a class="nav-link" href="/patient/dashboard">
+                                <i class="fas fa-tachometer-alt"></i> Dashboard
+                            </a>
+                            <a class="nav-link" href="/patient/book-appointment">
+                                <i class="fas fa-calendar-plus"></i> Book Appointment
+                            </a>
+                            <a class="nav-link" href="/patient/ai-recommendation">
+                                <i class="fas fa-robot"></i> AI Recommendations
+                            </a>
+                            <a class="nav-link" href="/patient/appointments">
+                                <i class="fas fa-calendar-check"></i> My Appointments
+                            </a>
+                            <a class="nav-link active" href="/patient/medications">
+                                <i class="fas fa-pills"></i> My Medications
+                            </a>
+                        </nav>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="col-lg-9">
+                    <h2 class="mb-4">
+                        <i class="fas fa-pills text-primary"></i> My Medications
+                    </h2>
+
+                    <div th:if="${medications.empty}" class="alert alert-info text-center">
+                        <i class="fas fa-info-circle"></i> You have no active medications.
+                    </div>
+
+                    <div th:unless="${medications.empty}" class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Medication Name</th>
+                                    <th>Dosage</th>
+                                    <th>Frequency</th>
+                                    <th>Prescribed Date</th>
+                                    <th>Duration</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="medication : ${medications}">
+                                    <td th:text="${medication.medicationName}"></td>
+                                    <td th:text="${medication.dosage}"></td>
+                                    <td th:text="${medication.frequency}"></td>
+                                    <td th:text="${#temporals.format(medication.prescribedAt, 'dd-MM-yyyy')}"></td>
+                                    <td th:text="${medication.durationDays} + ' days'"></td>
+                                    <td>
+                                        <span class="badge bg-success" th:if="${medication.status.name() == 'ACTIVE'}">Active</span>
+                                        <span class="badge bg-secondary" th:if="${medication.status.name() == 'COMPLETED'}">Completed</span>
+                                        <span class="badge bg-danger" th:if="${medication.status.name() == 'CANCELLED'}">Cancelled</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

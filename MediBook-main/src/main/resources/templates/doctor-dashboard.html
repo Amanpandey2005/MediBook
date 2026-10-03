@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediBook - Doctor Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c6fbb;
+            --secondary: #4cb050;
+            --light: #f5f7fa;
+            --dark: #263238;
+            --accent: #ff7846;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding-top: 20px;
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, var(--primary), #1a4f87);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        .dashboard-card {
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: none;
+            height: 100%;
+            margin-bottom: 20px;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .welcome-section {
+            background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)),
+            url('https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            background-color: #1a4f87;
+            border-color: #1a4f87;
+            transform: translateY(-2px);
+        }
+
+        .appointments-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .appointment-item {
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .badge-success {
+            background-color: var(--secondary);
+        }
+
+        .badge-warning {
+            background-color: #ffc107;
+        }
+
+        .section-title {
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: var(--secondary);
+        }
+
+        .stats-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        footer {
+            background: linear-gradient(135deg, var(--primary), #1a4f87);
+            color: white;
+            padding: 20px 0;
+            margin-top: 40px;
+            border-radius: 10px;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--accent);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.7rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nav-icon {
+            font-size: 1.2rem;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard-container">
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-hospital-alt me-2"></i>MediBook Doctor Portal
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#"><i class="fas fa-home nav-icon"></i> Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-calendar-check nav-icon"></i> Appointments</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-user-injured nav-icon"></i> Patients</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-cog nav-icon"></i> Settings</a>
+                    </li>
+                    <li class="nav-item position-relative">
+                        <a class="nav-link" href="#"><i class="fas fa-bell nav-icon"></i> Notifications
+                            <span class="notification-badge">3</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-sign-out-alt nav-icon"></i> Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="display-5 fw-bold">Welcome, Dr. Smith</h1>
+                    <p class="lead">Here's your personalized dashboard with today's schedule and important updates.</p>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <p class="mb-0"><strong>Today:</strong> <span id="current-date">September 9, 2025</span></p>
+                    <p><strong>Next appointment:</strong> 10:30 AM</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="row mb-5">
+            <div class="col-md-3 mb-4">
+                <div class="dashboard-card card text-center p-4">
+                    <div class="card-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h3 class="stats-number">12</h3>
+                    <p class="text-muted">Today's Appointments</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="dashboard-card card text-center p-4">
+                    <div class="card-icon">
+                        <i class="fas fa-user-injured"></i>
+                    </div>
+                    <h3 class="stats-number">8</h3>
+                    <p class="text-muted">Patients Waiting</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="dashboard-card card text-center p-4">
+                    <div class="card-icon">
+                        <i class="fas fa-stethoscope"></i>
+                    </div>
+                    <h3 class="stats-number">5</h3>
+                    <p class="text-muted">Completed Today</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="dashboard-card card text-center p-4">
+                    <div class="card-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3 class="stats-number">22</h3>
+                    <p class="text-muted">Waiting Time (min)</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Upcoming Appointments -->
+            <div class="col-lg-8 mb-4">
+                <h3 class="section-title">Today's Appointments</h3>
+                <div class="appointments-list">
+                    <div class="appointment-item">
+                        <div class="d-flex justify-content-between">
+                            <h5>John Doe</h5>
+                            <span class="badge bg-success">Confirmed</span>
+                        </div>
+                        <p class="mb-1"><i class="fas fa-clock me-2"></i> 9:30 AM - 10:00 AM</p>
+                        <p class="mb-1"><i class="fas fa-stethoscope me-2"></i> Routine Checkup</p>
+                        <p class="mb-0"><i class="fas fa-notes-medical me-2"></i> Last visit: 6 months ago</p>
+                        <div class="mt-2">
+                            <button class="btn btn-sm btn-outline-primary me-2">View Details</button>
+                            <button class="btn btn-sm btn-primary">Start Consultation</button>
+                        </div>
+                    </div>
+
+                    <div class="appointment-item">
+                        <div class="d-flex justify-content-between">
+                            <h5>Sarah Johnson</h5>
+                            <span class="badge bg-success">Confirmed</span>
+                        </div>
+                        <p class="mb-1"><i class="fas fa-clock me-2"></i> 10:00 AM - 10:30 AM</p>
+                        <p class="mb-1"><i class="fas fa-stethoscope me-2"></i> Follow-up Visit</p>
+                        <p class="mb-0"><i class="fas fa-notes-medical me-2"></i> Prescription refill requested</p>
+                        <div class="mt-2">
+                            <button class="btn btn-sm btn-outline-primary me-2">View Details</button>
+                            <button class="btn btn-sm btn-primary">Start Consultation</button>
+                        </div>
+                    </div>
+
+                    <div class="appointment-item">
+                        <div class="d-flex justify-content-between">
+                            <h5>Michael Brown</h5>
+                            <span class="badge bg-warning text-dark">Pending</span>
+                        </div>
+                        <p class="mb-1"><i class="fas fa-clock me-2"></i> 10:30 AM - 11:00 AM</p>
+                        <p class="mb-1"><i class="fas fa-stethoscope me-2"></i> New Patient</p>
+                        <p class="mb-0"><i class="fas fa-notes-medical me-2"></i> Insurance verification needed</p>
+                        <div class="mt-2">
+                            <button class="btn btn-sm btn-outline-primary me-2">View Details</button>
+                            <button class="btn btn-sm btn-primary">Verify Insurance</button>
+                        </div>
+                    </div>
+
+                    <div class="appointment-item">
+                        <div class="d-flex justify-content-between">
+                            <h5>Emily Wilson</h5>
+                            <span class="badge bg-success">Confirmed</span>
+                        </div>
+                        <p class="mb-1"><i class="fas fa-clock me-2"></i> 11:30 AM - 12:00 PM</p>
+                        <p class="mb-1"><i class="fas fa-stethoscope me-2"></i> Vaccination</p>
+                        <p class="mb-0"><i class="fas fa-notes-medical me-2"></i> Allergy to penicillin</p>
+                        <div class="mt-2">
+                            <button class="btn btn-sm btn-outline-primary me-2">View Details</button>
+                            <button class="btn btn-sm btn-primary">Start Consultation</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="col-lg-4 mb-4">
+                <h3 class="section-title">Quick Actions</h3>
+
+                <div class="dashboard-card card p-4 mb-4">
+                    <h5><i class="fas fa-plus-circle me-2"></i> New Appointment</h5>
+                    <p class="text-muted">Schedule a new appointment for a patient</p>
+                    <button class="btn btn-primary w-100" onclick="scheduleAppointment()">Schedule Now</button>
+                </div>
+
+                <div class="dashboard-card card p-4 mb-4">
+                    <h5><i class="fas fa-user-plus me-2"></i> Add Patient</h5>
+                    <p class="text-muted">Register a new patient in the system</p>
+                    <button class="btn btn-primary w-100" onclick="addPatient()">Add Patient</button>
+                </div>
+
+                <div class="dashboard-card card p-4 mb-4">
+                    <h5><i class="fas fa-prescription me-2"></i> Write Prescription</h5>
+                    <p class="text-muted">Create a new prescription for a patient</p>
+                    <button class="btn btn-primary w-100" onclick="writePrescription()">Create Prescription</button>
+                </div>
+
+                <div class="dashboard-card card p-4">
+                    <h5><i class="fas fa-file-medical me-2"></i> Medical Records</h5>
+                    <p class="text-muted">Access patient medical records</p>
+                    <button class="btn btn-primary w-100" onclick="accessRecords()">View Records</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center mt-5">
+        <div class="container">
+            <p class="mb-0">© 2025 MediBook Hospital Management System. All rights reserved.</p>
+            <p class="mb-0">For support, please contact: support@medibook.example.com | <i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+        </div>
+    </footer>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Set current date
+    function updateCurrentDate() {
+        const now = new Date();
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('current-date').textContent = now.toLocaleDateString('en-US', options);
+    }
+
+    // Initialize the dashboard
+    function initDashboard() {
+        updateCurrentDate();
+        console.log("Doctor dashboard initialized");
+    }
+
+    // Quick action functions
+    function scheduleAppointment() {
+        alert("Redirecting to appointment scheduling page...");
+        // In a real application, this would redirect to the scheduling page
+    }
+
+    function addPatient() {
+        alert("Redirecting to patient registration page...");
+        // In a real application, this would redirect to the patient registration page
+    }
+
+    function writePrescription() {
+        alert("Opening prescription creation form...");
+        // In a real application, this would open a prescription form
+    }
+
+    function accessRecords() {
+        alert("Accessing medical records system...");
+        // In a real application, this would redirect to the medical records page
+    }
+
+    // Initialize the dashboard when the page loads
+    window.onload = initDashboard;
+
+    // Add functionality to buttons
+    document.querySelectorAll('.btn-primary').forEach(button => {
+        button.addEventListener('click', function() {
+            const action = this.closest('.card').querySelector('h5').textContent;
+            console.log(`Action triggered: ${action}`);
+        });
+    });
+</script>
+</body>
+</html>

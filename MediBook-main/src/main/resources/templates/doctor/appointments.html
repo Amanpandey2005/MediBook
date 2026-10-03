@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::body})}">
+<head>
+    <title>My Appointments - MediBook</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <div class="container py-4">
+            <div class="row">
+                <div class="col-12">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="mb-0">
+                            <i class="fas fa-calendar-check text-primary"></i> My Appointments
+                        </h2>
+                        <a href="/doctor/dashboard" class="btn btn-outline-primary">
+                            <i class="fas fa-arrow-left"></i> Back to Dashboard
+                        </a>
+                    </div>
+
+                    <div th:if="${appointments != null and !appointments.empty}" class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">
+                                        <i class="fas fa-list"></i> Appointment List
+                                    </h5>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover mb-0">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>Patient</th>
+                                                    <th>Date & Time</th>
+                                                    <th>Reason</th>
+                                                    <th>Symptoms</th>
+                                                    <th>Status</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each="appointment : ${appointments}">
+                                                    <td>
+                                                        <div class="d-flex align-items-center">
+                                                            <i class="fas fa-user-circle fa-2x text-primary me-3"></i>
+                                                            <div>
+                                                                <h6 class="mb-0" th:text="${appointment.patient.fullName}">Patient Name</h6>
+                                                                <small class="text-muted" th:text="${appointment.patient.email}">patient@email.com</small>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div>
+                                                            <strong th:text="${#temporals.format(appointment.appointmentDateTime, 'MMM dd, yyyy')}">Jan 15, 2024</strong>
+                                                            <br>
+                                                            <small class="text-muted" th:text="${#temporals.format(appointment.appointmentDateTime, 'HH:mm')}">10:30 AM</small>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <span th:text="${appointment.reasonForVisit}">General Checkup</span>
+                                                    </td>
+                                                    <td>
+                                                        <span th:text="${appointment.symptoms}" class="text-muted">No symptoms reported</span>
+                                                    </td>
+                                                    <td>
+                                                        <span th:switch="${appointment.status}" class="badge">
+                                                            <span th:case="SCHEDULED" class="badge bg-warning">Scheduled</span>
+                                                            <span th:case="COMPLETED" class="badge bg-success">Completed</span>
+                                                            <span th:case="CANCELLED" class="badge bg-danger">Cancelled</span>
+                                                            <span th:case="*" class="badge bg-secondary" th:text="${appointment.status}">Unknown</span>
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <div class="btn-group" role="group">
+                                                            <a th:href="@{/doctor/appointment/{id}(id=${appointment.id})}" 
+                                                               class="btn btn-sm btn-outline-primary" 
+                                                               title="View Details">
+                                                                <i class="fas fa-eye"></i>
+                                                            </a>
+                                                            <a th:if="${appointment.status.name() == 'SCHEDULED'}"
+                                                               th:href="@{/doctor/appointment/{id}/complete(id=${appointment.id})}" 
+                                                               class="btn btn-sm btn-outline-success" 
+                                                               title="Complete Appointment"
+                                                               onclick="return confirm('Are you sure you want to complete this appointment?')">
+                                                                <i class="fas fa-check"></i>
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div th:if="${appointments == null or appointments.empty}" class="text-center py-5">
+                        <div class="card">
+                            <div class="card-body">
+                                <i class="fas fa-calendar-times fa-4x text-muted mb-4"></i>
+                                <h4 class="text-muted">No Appointments Found</h4>
+                                <p class="text-muted">You don't have any appointments scheduled at the moment.</p>
+                                <a href="/doctor/dashboard" class="btn btn-primary">
+                                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+
+

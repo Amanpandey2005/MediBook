@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(content=~{::content})}">
+<head>
+    <title>Admin Dashboard - MediBook</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <div class="container py-4">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-lg-3">
+                    <div class="sidebar">
+                        <h5 class="mb-3">Admin Dashboard</h5>
+                        <nav class="nav flex-column">
+                            <a class="nav-link active" href="/admin/dashboard">
+                                <i class="fas fa-tachometer-alt"></i> Dashboard
+                            </a>
+                            <a class="nav-link" href="#createDoctor">
+                                <i class="fas fa-user-md"></i> Create Doctor
+                            </a>
+                            <a class="nav-link" href="#doctorsList">
+                                <i class="fas fa-users"></i> Doctors
+                            </a>
+                            <a class="nav-link" href="#patientsList">
+                                <i class="fas fa-user"></i> Patients
+                            </a>
+                            <a class="nav-link" href="/admin/feedback">
+                                <i class="fas fa-envelope"></i> Feedback
+                                <span th:if="${unreadCount > 0}" class="badge bg-danger ms-2" th:text="${unreadCount}">0</span>
+                            </a>
+                            <a class="nav-link" href="/logout">
+                                <i class="fas fa-right-from-bracket"></i> Logout
+                            </a>
+                        </nav>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="col-lg-9">
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                        <h2 class="mb-0">
+                            <i class="fas fa-user-shield text-primary"></i> Admin Dashboard
+                        </h2>
+                        <a href="/admin/feedback" class="btn btn-outline-primary position-relative">
+                            <i class="fas fa-bell"></i> Feedback
+                            <span th:if="${unreadCount > 0}" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" th:text="${unreadCount}">0</span>
+                        </a>
+                    </div>
+
+                    <!-- Success/Error Messages -->
+                    <div th:if="${param.created}" class="alert alert-success">
+                        <i class="fas fa-check-circle"></i> Doctor account created successfully.
+                    </div>
+                    <div th:if="${param.updatedDoctor}" class="alert alert-success">
+                        <i class="fas fa-check-circle"></i> Doctor updated successfully.
+                    </div>
+                    <div th:if="${param.deletedDoctor}" class="alert alert-success">
+                        <i class="fas fa-check-circle"></i> Doctor deleted successfully.
+                    </div>
+                    <div th:if="${param.deletedPatient}" class="alert alert-success">
+                        <i class="fas fa-check-circle"></i> Patient deleted successfully.
+                    </div>
+                    <div th:if="${error}" class="alert alert-danger">
+                        <i class="fas fa-exclamation-circle"></i> <span th:text="${error}"></span>
+                    </div>
+
+                    <!-- Stats Cards -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-3">
+                            <div class="card stats-card">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <div class="h4 mb-0" th:text="${#lists.size(doctors)}">0</div>
+                                            <small class="text-muted">Total Doctors</small>
+                                        </div>
+                                        <i class="fas fa-user-md fa-2x text-primary"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card stats-card">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <div class="h4 mb-0" th:text="${#lists.size(patients)}">0</div>
+                                            <small class="text-muted">Total Patients</small>
+                                        </div>
+                                        <i class="fas fa-user fa-2x text-success"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card stats-card">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <div class="h4 mb-0" th:text="${unreadCount}">0</div>
+                                            <small class="text-muted">Unread Feedback</small>
+                                        </div>
+                                        <i class="fas fa-envelope fa-2x text-warning"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card stats-card">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <div class="h4 mb-0">24/7</div>
+                                            <small class="text-muted">Support Available</small>
+                                        </div>
+                                        <i class="fas fa-headset fa-2x text-info"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-lg-6" id="createDoctor">
+                            <div class="card shadow-sm">
+                                <div class="card-header">
+                                    <strong><i class="fas fa-user-md"></i> Create Doctor Account</strong>
+                                </div>
+                                <div class="card-body">
+                                    <form th:action="@{/admin/create-doctor}" method="post">
+                                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label">First Name</label>
+                                                <input class="form-control" name="firstName" required th:value="${newDoctorUser.firstName}">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Last Name</label>
+                                                <input class="form-control" name="lastName" required th:value="${newDoctorUser.lastName}">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Email</label>
+                                                <input type="email" class="form-control" name="email" required th:value="${newDoctorUser.email}">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Phone</label>
+                                                <input class="form-control" name="phoneNumber" required th:value="${newDoctorUser.phoneNumber}">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Password</label>
+                                                <input type="password" class="form-control" name="password" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Confirm Password</label>
+                                                <input type="password" class="form-control" name="confirmPassword" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Specialization</label>
+                                                <input class="form-control" name="specialization" required th:value="${newDoctor.specialization}">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">License Number</label>
+                                                <input class="form-control" name="licenseNumber" required th:value="${newDoctor.licenseNumber}">
+                                            </div>
+                                            <div class="col-12">
+                                                <label class="form-label">Bio</label>
+                                                <textarea class="form-control" name="bio" rows="3" th:text="${newDoctor.bio}"></textarea>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Experience Years</label>
+                                                <input type="number" class="form-control" name="experienceYears" min="0" th:value="${newDoctor.experienceYears}">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Clinic</label>
+                                                <select class="form-select" name="clinic" required>
+                                                    <option value="">Choose a clinic...</option>
+                                                    <option th:each="c : ${clinics}" th:value="${c}" th:text="${c}"></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="mt-3">
+                                            <button class="btn btn-primary">
+                                                <i class="fas fa-plus"></i> Create Doctor
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6" id="doctorsList">
+                            <div class="card mb-4 shadow-sm">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <strong><i class="fas fa-user-md"></i> Doctors</strong>
+                                    <form th:action="@{/admin/dashboard}" method="get" class="d-flex">
+                                        <input type="text" name="search" class="form-control form-control-sm me-2" placeholder="Search doctors..." th:value="${search}">
+                                        <button type="submit" class="btn btn-outline-primary btn-sm">
+                                            <i class="fas fa-search"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="table mb-0">
+                                            <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Specialization</th>
+                                                <th>License</th>
+                                                <th style="width:120px;">Actions</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="d : ${doctors}">
+                                                <td th:text="${d.user.fullName}"></td>
+                                                <td th:text="${d.specialization}"></td>
+                                                <td th:text="${d.licenseNumber}"></td>
+                                                <td class="d-flex">
+                                                    <a th:href="@{'/admin/doctor/' + ${d.id} + '/edit'}" class="btn btn-sm btn-outline-primary me-1" title="Edit">
+                                                        <i class="fas fa-pen"></i>
+                                                    </a>
+                                                    <form th:action="@{'/admin/doctor/' + ${d.id} + '/delete'}" method="post" onsubmit="return confirm('Delete this doctor? This will remove related appointments and prescriptions.');">
+                                                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                                                        <button class="btn btn-sm btn-outline-danger" title="Delete">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            <tr th:if="${#lists.isEmpty(doctors)}">
+                                                <td colspan="4" class="text-center text-muted py-3">
+                                                    <i class="fas fa-user-md fa-2x mb-2"></i><br>
+                                                    No doctors found
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card" id="patientsList">
+                                <div class="card-header"><strong><i class="fas fa-user"></i> Patients</strong></div>
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="table mb-0">
+                                            <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Email</th>
+                                                <th style="width:120px;">Actions</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="p : ${patients}">
+                                                <td th:text="${p.fullName}"></td>
+                                                <td th:text="${p.email}"></td>
+                                                <td>
+                                                    <form th:action="@{'/admin/patient/' + ${p.id} + '/delete'}" method="post" onsubmit="return confirm('Delete this patient? This will remove related appointments and prescriptions.');">
+                                                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                                                        <button class="btn btn-sm btn-outline-danger" title="Delete">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            <tr th:if="${#lists.isEmpty(patients)}">
+                                                <td colspan="3" class="text-center text-muted py-3">
+                                                    <i class="fas fa-user fa-2x mb-2"></i><br>
+                                                    No patients found
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

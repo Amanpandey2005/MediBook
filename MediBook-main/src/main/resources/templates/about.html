@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::body})}">
+<head>
+    <title>About Us - MediBook</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-8">
+                        <h1 class="display-4 fw-bold mb-4">About MediBook</h1>
+                        <p class="lead">Transforming healthcare through technology and compassionate care</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Content -->
+        <section class="py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <div class="card">
+                            <div class="card-body p-5">
+                                <h2 class="h3 mb-4 text-primary">Our Mission</h2>
+                                <p class="lead">At MediBook, we believe that quality healthcare should be accessible, convenient, and personalized. Our mission is to bridge the gap between patients and healthcare providers through innovative technology solutions.</p>
+                                
+                                <h2 class="h3 mb-4 text-primary mt-5">What We Do</h2>
+                                <div class="row g-4">
+                                    <div class="col-md-6">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0">
+                                                <div class="feature-icon" style="width: 50px; height: 50px; margin: 0;">
+                                                    <i class="fas fa-calendar-check"></i>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <h5>Appointment Booking</h5>
+                                                <p>Easy online appointment scheduling with qualified doctors across various specializations.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0">
+                                                <div class="feature-icon" style="width: 50px; height: 50px; margin: 0;">
+                                                    <i class="fas fa-robot"></i>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <h5>AI Recommendations</h5>
+                                                <p>Intelligent doctor recommendations based on symptoms and medical history analysis.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0">
+                                                <div class="feature-icon" style="width: 50px; height: 50px; margin: 0;">
+                                                    <i class="fas fa-pills"></i>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <h5>Medication Management</h5>
+                                                <p>Comprehensive medication tracking and prescription management system.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0">
+                                                <div class="feature-icon" style="width: 50px; height: 50px; margin: 0;">
+                                                    <i class="fas fa-envelope"></i>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <h5>Email Notifications</h5>
+                                                <p>Automated email confirmations and reminders for appointments and medications.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h2 class="h3 mb-4 text-primary mt-5">Our Values</h2>
+                                <div class="row g-4">
+                                    <div class="col-md-4">
+                                        <div class="text-center">
+                                            <div class="feature-icon mx-auto mb-3">
+                                                <i class="fas fa-heart"></i>
+                                            </div>
+                                            <h5>Compassion</h5>
+                                            <p>We care deeply about our patients' wellbeing and strive to provide empathetic care.</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="text-center">
+                                            <div class="feature-icon mx-auto mb-3">
+                                                <i class="fas fa-shield-alt"></i>
+                                            </div>
+                                            <h5>Trust</h5>
+                                            <p>We maintain the highest standards of security and confidentiality for all medical data.</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="text-center">
+                                            <div class="feature-icon mx-auto mb-3">
+                                                <i class="fas fa-lightbulb"></i>
+                                            </div>
+                                            <h5>Innovation</h5>
+                                            <p>We continuously innovate to improve healthcare delivery and patient experience.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h2 class="h3 mb-4 text-primary mt-5">Our Team</h2>
+                                <p>MediBook is powered by a dedicated team of healthcare professionals, software engineers, and medical experts who are passionate about improving healthcare accessibility. Our team combines deep medical knowledge with cutting-edge technology to deliver solutions that truly make a difference.</p>
+                                
+                                <div class="row g-4 mt-4">
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            <div class="card-body text-center">
+                                                <i class="fas fa-user-md text-primary" style="font-size: 3rem;"></i>
+                                                <h5 class="mt-3">Medical Experts</h5>
+                                                <p>Board-certified doctors and healthcare professionals ensuring quality care.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            <div class="card-body text-center">
+                                                <i class="fas fa-code text-primary" style="font-size: 3rem;"></i>
+                                                <h5 class="mt-3">Technology Team</h5>
+                                                <p>Experienced developers and engineers building robust healthcare solutions.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="py-5" style="background-color: var(--lighter-blue);">
+            <div class="container">
+                <div class="row justify-content-center text-center">
+                    <div class="col-lg-8">
+                        <h2 class="display-5 fw-bold mb-4">Join Our Healthcare Revolution</h2>
+                        <p class="lead mb-4">Experience the future of healthcare with MediBook's innovative platform.</p>
+                        <a href="/register" class="btn btn-primary btn-lg me-3">
+                            <i class="fas fa-user-plus"></i> Get Started
+                        </a>
+                        <a href="/contact" class="btn btn-outline-primary btn-lg">
+                            <i class="fas fa-phone"></i> Contact Us
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

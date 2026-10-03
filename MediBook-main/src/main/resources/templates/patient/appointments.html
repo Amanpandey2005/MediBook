@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(content=~{::content})}">
+<head>
+    <title>My Appointments - MediBook</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <div class="container py-4">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-lg-3">
+                    <div class="sidebar">
+                        <h5 class="mb-3">Patient Dashboard</h5>
+                        <nav class="nav flex-column">
+                            <a class="nav-link" href="/patient/dashboard">
+                                <i class="fas fa-tachometer-alt"></i> Dashboard
+                            </a>
+                            <a class="nav-link" href="/patient/book-appointment">
+                                <i class="fas fa-calendar-plus"></i> Book Appointment
+                            </a>
+                            <a class="nav-link" href="/patient/ai-recommendation">
+                                <i class="fas fa-robot"></i> AI Recommendations
+                            </a>
+                            <a class="nav-link active" href="/patient/appointments">
+                                <i class="fas fa-calendar-check"></i> My Appointments
+                            </a>
+                            <a class="nav-link" href="/patient/medications">
+                                <i class="fas fa-pills"></i> My Medications
+                            </a>
+                        </nav>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="col-lg-9">
+                    <h2 class="mb-4">
+                        <i class="fas fa-calendar-check text-primary"></i> My Appointments
+                    </h2>
+
+                    <div th:if="${appointments.isEmpty()}" class="alert alert-info text-center">
+                        <i class="fas fa-info-circle"></i> You have no upcoming appointments.
+                    </div>
+
+                    <div th:unless="${appointments.isEmpty()}" class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Doctor</th>
+                                    <th>Specialization</th>
+                                    <th>Date & Time</th>
+                                    <th>Reason</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="appointment : ${appointments}">
+                                    <td th:text="${appointment.doctor.user.fullName}"></td>
+                                    <td th:text="${appointment.doctor.specialization}"></td>
+                                    <td th:text="${#temporals.format(appointment.appointmentDateTime, 'dd-MM-yyyy HH:mm')}"></td>
+                                    <td th:text="${appointment.reasonForVisit}"></td>
+                                    <td>
+                                        <span class="badge bg-warning" th:if="${appointment.status.name() == 'SCHEDULED'}">Scheduled</span>
+                                        <span class="badge bg-success" th:if="${appointment.status.name() == 'CONFIRMED'}">Confirmed</span>
+                                        <span class="badge bg-info" th:if="${appointment.status.name() == 'COMPLETED'}">Completed</span>
+                                        <span class="badge bg-danger" th:if="${appointment.status.name() == 'CANCELLED'}">Cancelled</span>
+                                    </td>
+                                    <td>
+                                        <button th:if="${appointment.status.name() == 'SCHEDULED' || appointment.status.name() == 'CONFIRMED'}" 
+                                                type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#cancelAppointmentModal" 
+                                                th:data-appointment-id="${appointment.id}">
+                                            <i class="fas fa-times-circle"></i> Cancel
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cancel Appointment Modal -->
+        <div class="modal fade" id="cancelAppointmentModal" tabindex="-1" aria-labelledby="cancelAppointmentModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="cancelAppointmentModalLabel">Confirm Cancellation</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to cancel this appointment?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <form method="post" id="cancelAppointmentForm">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                            <button type="submit" class="btn btn-danger">Confirm Cancel</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var cancelAppointmentModal = document.getElementById('cancelAppointmentModal');
+                cancelAppointmentModal.addEventListener('show.bs.modal', function (event) {
+                    var button = event.relatedTarget;
+                    var appointmentId = button.getAttribute('data-appointment-id');
+                    var form = document.getElementById('cancelAppointmentForm');
+                    form.action = '/patient/cancel-appointment/' + appointmentId;
+                });
+            });
+        </script>
+    </div>
+</body>
+</html>
+

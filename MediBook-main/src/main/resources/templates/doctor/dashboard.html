@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::div#doctorDashboardPageContent})}">
+<head>
+    <title>Doctor Dashboard - MediBook</title>
+</head>
+<body>
+    <div th:fragment="doctorDashboardPageContent" id="doctorDashboardPageContent">
+        <div class="container py-4">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-lg-3">
+                    <div class="sidebar">
+                        <h5 class="mb-3">Doctor Dashboard</h5>
+                        <nav class="nav flex-column">
+                            <a class="nav-link active" href="/doctor/dashboard">
+                                <i class="fas fa-tachometer-alt"></i> Dashboard
+                            </a>
+                            <a class="nav-link" href="/doctor/appointments">
+                                <i class="fas fa-calendar-check"></i> Appointments
+                            </a>
+                            <a class="nav-link" href="/doctor/medications">
+                                <i class="fas fa-pills"></i> Medications
+                            </a>
+                        </nav>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="col-lg-9">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2>Welcome, Dr. <span th:text="${doctor.user.lastName}">Smith</span>!</h2>
+                        <div class="text-end">
+                            <p class="text-muted mb-0">Specialization: <span th:text="${doctor.specialization}">Cardiology</span></p>
+                            <p class="text-muted mb-0">License: <span th:text="${doctor.licenseNumber}">MD123456</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Quick Stats -->
+                    <div class="row mb-4">
+                        <div class="col-md-3">
+                            <div class="card stats-card">
+                                <div class="card-body text-center">
+                                    <h3 class="text-primary" th:text="${appointments.size()}">0</h3>
+                                    <p class="text-muted mb-0">Total Appointments</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card stats-card">
+                                <div class="card-body text-center">
+                                    <h3 class="text-primary" th:text="${prescribedMedications.size()}">0</h3>
+                                    <p class="text-muted mb-0">Prescribed Medications</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card stats-card">
+                                <div class="card-body text-center">
+                                    <h3 class="text-primary" th:text="${doctor.experienceYears}">10</h3>
+                                    <p class="text-muted mb-0">Years Experience</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card stats-card">
+                                <div class="card-body text-center">
+                                    <h3 class="text-primary">4.9</h3>
+                                    <p class="text-muted mb-0">Average Rating</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Today's Appointments -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-calendar-day text-primary"></i> Today's Appointments
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div th:if="${appointments.isEmpty()}" class="text-center py-4">
+                                <i class="fas fa-calendar-times text-muted" style="font-size: 3rem;"></i>
+                                <p class="text-muted mt-3">No appointments scheduled for today</p>
+                            </div>
+                            <div th:if="${!appointments.isEmpty()}" class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Patient</th>
+                                            <th>Time</th>
+                                            <th>Reason</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="appointment : ${appointments}">
+                                            <td th:text="${appointment.patient.fullName}">John Doe</td>
+                                            <td th:text="${#temporals.format(appointment.appointmentDateTime, 'HH:mm')}">10:00</td>
+                                            <td th:text="${appointment.reasonForVisit}">Chest pain</td>
+                                            <td>
+                                                <span th:switch="${appointment.status}" class="badge">
+                                                    <span th:case="SCHEDULED" class="badge bg-warning">Scheduled</span>
+                                                    <span th:case="CONFIRMED" class="badge bg-success">Confirmed</span>
+                                                    <span th:case="IN_PROGRESS" class="badge bg-info">In Progress</span>
+                                                    <span th:case="COMPLETED" class="badge bg-secondary">Completed</span>
+                                                    <span th:case="CANCELLED" class="badge bg-danger">Cancelled</span>
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <a th:href="@{/doctor/appointment/{id}(id=${appointment.id})}" 
+                                                   class="btn btn-sm btn-primary">
+                                                    <i class="fas fa-eye"></i> View
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Medications -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-pills text-primary"></i> Recent Prescriptions
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div th:if="${prescribedMedications.isEmpty()}" class="text-center py-4">
+                                <i class="fas fa-pills text-muted" style="font-size: 3rem;"></i>
+                                <p class="text-muted mt-3">No recent prescriptions</p>
+                            </div>
+                            <div th:if="${!prescribedMedications.isEmpty()}" class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Patient</th>
+                                            <th>Medication</th>
+                                            <th>Dosage</th>
+                                            <th>Date</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="medication : ${prescribedMedications}">
+                                            <td th:text="${medication.patient.fullName}">John Doe</td>
+                                            <td th:text="${medication.medicationName}">Aspirin</td>
+                                            <td th:text="${medication.dosage}">100mg</td>
+                                            <td th:text="${#temporals.format(medication.prescribedAt, 'MMM dd, yyyy')}">Jan 15, 2024</td>
+                                            <td>
+                                                <span th:switch="${medication.status}" class="badge">
+                                                    <span th:case="ACTIVE" class="badge bg-success">Active</span>
+                                                    <span th:case="COMPLETED" class="badge bg-secondary">Completed</span>
+                                                    <span th:case="CANCELLED" class="badge bg-danger">Cancelled</span>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

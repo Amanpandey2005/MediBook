@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::div#aiRecommendationPageContent})}">
+<head>
+    <title>AI Doctor Recommendation - MediBook</title>
+</head>
+<body>
+    <div th:fragment="aiRecommendationPageContent" id="aiRecommendationPageContent">
+        <div class="container py-4">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-lg-3">
+                    <div class="sidebar">
+                        <h5 class="mb-3">Patient Dashboard</h5>
+                        <nav class="nav flex-column">
+                            <a class="nav-link" href="/patient/dashboard">
+                                <i class="fas fa-tachometer-alt"></i> Dashboard
+                            </a>
+                            <a class="nav-link" href="/patient/book-appointment">
+                                <i class="fas fa-calendar-plus"></i> Book Appointment
+                            </a>
+                            <a class="nav-link active" href="/patient/ai-recommendation">
+                                <i class="fas fa-robot"></i> AI Recommendations
+                            </a>
+                            <a class="nav-link" href="/patient/appointments">
+                                <i class="fas fa-calendar-check"></i> My Appointments
+                            </a>
+                            <a class="nav-link" href="/patient/medications">
+                                <i class="fas fa-pills"></i> My Medications
+                            </a>
+                        </nav>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="col-lg-9">
+                    <h2 class="mb-4">
+                        <i class="fas fa-robot text-primary"></i> AI Doctor Recommendation
+                    </h2>
+
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">Describe Your Symptoms</h5>
+                        </div>
+                        <div class="card-body">
+                            <form th:action="@{/patient/ai-recommendation}" method="post">
+                                <div class="mb-3">
+                                    <label for="illnessDescription" class="form-label">Symptoms and Health Concerns</label>
+                                    <textarea class="form-control" id="illnessDescription" name="illnessDescription"
+                                              rows="4" placeholder="Please describe your symptoms, health concerns, or the reason you need to see a doctor. Be as detailed as possible to get the best recommendations..."
+                                              th:value="${illnessDescription}"></textarea>
+                                    <div class="form-text">Example: "I've been experiencing chest pain and shortness of breath for the past week, especially when I exercise."</div>
+                                </div>
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-search"></i> Get AI Recommendations
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- AI Recommendation Results -->
+                    <div th:if="${recommendedDoctors != null}" class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-lightbulb text-primary"></i> AI Recommendations
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div th:if="${explanation}" class="alert alert-info">
+                                <i class="fas fa-info-circle"></i> <span th:text="${explanation}">Recommendation explanation</span>
+                            </div>
+
+                            <!-- Detailed Medical Advice -->
+                            <div th:if="${detailedAdvice}" class="alert alert-light border">
+                                <h6 class="alert-heading">
+                                    <i class="fas fa-stethoscope text-primary"></i> AI Medical Analysis
+                                </h6>
+                                <div th:text="${detailedAdvice}" style="white-space: pre-line;"></div>
+                                <hr>
+                                <small class="text-muted">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    This is AI-generated information and should not replace professional medical advice.
+                                    Always consult with a qualified healthcare provider for proper diagnosis and treatment.
+                                </small>
+                            </div>
+
+                            <div th:if="${recommendedDoctors.isEmpty()}" class="text-center py-4">
+                                <i class="fas fa-user-md text-muted" style="font-size: 3rem;"></i>
+                                <p class="text-muted mt-3">No specific recommendations found. Please consult with any available doctor.</p>
+                            </div>
+
+                            <div th:if="${!recommendedDoctors.isEmpty()}" class="row">
+                                <div th:each="doctor : ${recommendedDoctors}" class="col-md-6 mb-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h6 th:text="${doctor.user.fullName}">Dr. John Smith</h6>
+                                            <p class="text-muted mb-1">
+                                                <strong>Specialization:</strong> <span th:text="${doctor.specialization}">Cardiology</span>
+                                            </p>
+                                            <p class="text-muted mb-1" th:if="${doctor.experienceYears}">
+                                                <strong>Experience:</strong> <span th:text="${doctor.experienceYears}">10</span> years
+                                            </p>
+                                            <p class="text-muted mb-2" th:if="${doctor.bio}">
+                                                <span th:text="${doctor.bio}">Experienced cardiologist with expertise in heart conditions.</span>
+                                            </p>
+                                            <a th:href="@{/patient/book-appointment}" class="btn btn-sm btn-primary">
+                                                <i class="fas fa-calendar-plus"></i> Book Appointment
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- How AI Recommendations Work -->
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-question-circle text-primary"></i> How AI Recommendations Work
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4 text-center">
+                                    <div class="feature-icon mx-auto mb-3">
+                                        <i class="fas fa-brain"></i>
+                                    </div>
+                                    <h6>Analyze Symptoms</h6>
+                                    <p class="text-muted">Our AI analyzes your symptoms and medical history to understand your needs.</p>
+                                </div>
+                                <div class="col-md-4 text-center">
+                                    <div class="feature-icon mx-auto mb-3">
+                                        <i class="fas fa-search"></i>
+                                    </div>
+                                    <h6>Match Specialists</h6>
+                                    <p class="text-muted">We match you with doctors who specialize in treating your specific condition.</p>
+                                </div>
+                                <div class="col-md-4 text-center">
+                                    <div class="feature-icon mx-auto mb-3">
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                    <h6>Rank by Experience</h6>
+                                    <p class="text-muted">Doctors are ranked based on their experience and expertise in relevant areas.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

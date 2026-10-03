@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:fragment="layout(content)">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title} ?: 'MediBook - Hospital Booking System'">MediBook</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+          rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #1e3a8a;
+            --light-blue: #3b82f6;
+            --lighter-blue: #dbeafe;
+            --white: #ffffff;
+            --light-gray: #f8fafc;
+            --dark-gray: #374151;
+            --text-gray: #6b7280;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-blue), var(--light-blue));
+            box-shadow: 0 8px 24px rgba(30,58,138,0.18);
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-blue), var(--light-blue));
+            border: none;
+            border-radius: 10px;
+            padding: 12px 22px;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+            transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(30, 58, 138, 0.35);
+            filter: brightness(1.02);
+        }
+
+        .btn-outline-primary {
+            border: 2px solid var(--primary-blue);
+            color: var(--primary-blue);
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--primary-blue);
+            border-color: var(--primary-blue);
+            transform: translateY(-2px);
+        }
+
+        .card {
+            border: none;
+            border-radius: 14px;
+            box-shadow: 0 10px 30px rgba(2,12,27,0.06);
+            transition: transform .25s ease, box-shadow .25s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 40px rgba(2,12,27,0.12);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--lighter-blue), var(--white));
+            border-bottom: 1px solid var(--lighter-blue);
+            border-radius: 14px 14px 0 0 !important;
+            font-weight: 700;
+        }
+
+        .form-control {
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 12px 15px;
+            transition: all 0.2s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--light-blue);
+            box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
+        }
+
+        .hero-section {
+            background: linear-gradient(120deg, rgba(30,58,138,1), rgba(59,130,246,0.95));
+            color: white;
+            padding: 90px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-section::after {
+            content: "";
+            position: absolute;
+            inset: -20% -10% auto auto;
+            width: 60vw;
+            height: 60vw;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.12), rgba(255,255,255,0) 60%);
+            filter: blur(6px);
+            opacity: .7;
+            pointer-events: none;
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--light-blue), var(--lighter-blue));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: var(--primary-blue);
+            font-size: 24px;
+            box-shadow: 0 8px 22px rgba(30,58,138,0.15);
+        }
+
+        .nav-link {
+            position: relative;
+            font-weight: 500;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            left: 12px;
+            right: 12px;
+            bottom: 6px;
+            height: 2px;
+            background: rgba(255,255,255,0.7);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform .25s ease;
+        }
+        .nav-link:hover::after, .nav-link:focus::after {
+            transform: scaleX(1);
+        }
+
+        .footer {
+            background: var(--primary-blue);
+            color: white;
+            padding: 40px 0 20px;
+        }
+        .footer-logo {
+            height: 40px; /* Reduced from 65px */
+            width: auto;
+            margin-right: 10px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+        .footer h5 {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .alert {
+            border: none;
+            border-radius: 8px;
+            padding: 15px 20px;
+        }
+
+        .table {
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .table thead th {
+            background: var(--lighter-blue);
+            border: none;
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+
+        .badge {
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .badge-success {
+            background-color: #10b981;
+        }
+
+        .badge-warning {
+            background-color: #f59e0b;
+        }
+
+        .badge-danger {
+            background-color: #ef4444;
+        }
+
+        .badge-info {
+            background-color: var(--light-blue);
+        }
+
+        .sidebar {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .sidebar .nav-link {
+            color: var(--text-gray);
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background: var(--lighter-blue);
+            color: var(--primary-blue);
+        }
+
+        .stats-card {
+            background: linear-gradient(135deg, var(--white), var(--lighter-blue));
+            border-left: 4px solid var(--light-blue);
+        }
+
+        /* Utility */
+        .bg-gradient-soft {
+            background: linear-gradient(180deg, #ffffff, #f3f7ff);
+        }
+
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 40px 0;
+            }
+
+            .card {
+                margin-bottom: 20px;
+            }
+        }
+
+        /* Dark Mode Styles */
+        [data-theme="dark"] {
+            --primary-blue: #1a1a2e;
+            --light-blue: #16213e;
+            --lighter-blue: #0f3460;
+            --white: #1a1a2e;
+            --light-gray: #16213e;
+            --dark-gray: #e0e0e0;
+            --text-gray: #b0b0b0;
+        }
+
+        [data-theme="dark"] body {
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+        }
+
+        [data-theme="dark"] .navbar {
+            background: linear-gradient(135deg, var(--primary-blue), var(--light-blue));
+        }
+
+        [data-theme="dark"] .card {
+            background-color: var(--primary-blue);
+            color: var(--dark-gray);
+            border: 1px solid var(--lighter-blue);
+        }
+
+        [data-theme="dark"] .card-header {
+            background: linear-gradient(135deg, var(--lighter-blue), var(--primary-blue));
+            border-bottom: 1px solid var(--lighter-blue);
+        }
+
+        [data-theme="dark"] .form-control {
+            background-color: var(--primary-blue);
+            border: 2px solid var(--lighter-blue);
+            color: var(--dark-gray);
+        }
+
+        [data-theme="dark"] .form-control:focus {
+            background-color: var(--primary-blue);
+            border-color: var(--light-blue);
+            color: var(--dark-gray);
+        }
+
+        [data-theme="dark"] .table {
+            color: var(--dark-gray);
+        }
+
+        [data-theme="dark"] .table thead th {
+            background: var(--lighter-blue);
+            color: var(--dark-gray);
+        }
+
+        [data-theme="dark"] .sidebar {
+            background: var(--primary-blue);
+            border: 1px solid var(--lighter-blue);
+        }
+
+        [data-theme="dark"] .sidebar .nav-link {
+            color: var(--text-gray);
+        }
+
+        [data-theme="dark"] .sidebar .nav-link:hover,
+        [data-theme="dark"] .sidebar .nav-link.active {
+            background: var(--lighter-blue);
+            color: var(--dark-gray);
+        }
+    </style>
+</head>
+<body>
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <img th:src="@{/images/medbook_logo.png}" alt="MediBook Logo"
+                 style="height: 65px; width: auto; margin-right: 15px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));">
+            <span style="font-weight: 800; font-size: 1.8rem; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">MediBook</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/services">Services</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/partners">Partners</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/contact">Contact</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('PATIENT')">
+                    <a class="nav-link" href="/patient/book-appointment">Book Appointment</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link" href="/admin/dashboard">Admin Panel</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <button class="btn btn-link nav-link border-0" id="darkModeToggle" onclick="toggleDarkMode()"
+                            style="color: white !important;">
+                        <i class="fas fa-moon" id="darkModeIcon"></i>
+                    </button>
+                </li>
+                <li class="nav-item" sec:authorize="isAnonymous()">
+                    <a class="nav-link" href="/login">Login</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAnonymous()">
+                    <a class="nav-link" href="/register">Register</a>
+                </li>
+                <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-user"></i> <span sec:authentication="name">User</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/dashboard">Dashboard</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<main>
+    <div th:insert="${content}"></div>
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <h5>
+                    <img th:src="@{/images/medbook_logo.png}" alt="MediBook Logo" class="footer-logo">
+                    MediBook
+                </h5>
+                <p>Your trusted partner in healthcare. We provide comprehensive medical services with the latest
+                    technology and expert care.</p>
+            </div>
+            <div class="col-md-4">
+                <h5>Quick Links</h5>
+                <ul class="list-unstyled">
+                    <li><a href="/about" class="text-light">About Us</a></li>
+                    <li><a href="/services" class="text-light">Services</a></li>
+                    <li><a href="/contact" class="text-light">Contact</a></li>
+                    <li><a href="/partners" class="text-light">Partners</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h5>Contact Info</h5>
+                <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                <p><i class="fas fa-envelope"></i> mecergroup4@gmail.com</p>
+                <p><i class="fas fa-map-marker-alt"></i>322 15th Rd, Randjespark, Midrand, 1685</p>
+            </div>
+        </div>
+        <hr class="my-4">
+        <div class="text-center">
+            <p>&copy; 2025 MediBook. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Dark Mode Toggle Functionality
+    function toggleDarkMode() {
+        const body = document.body;
+        const darkModeIcon = document.getElementById('darkModeIcon');
+        const currentTheme = body.getAttribute('data-theme');
+
+        if (currentTheme === 'dark') {
+            // Switch to light mode
+            body.removeAttribute('data-theme');
+            darkModeIcon.className = 'fas fa-moon';
+            localStorage.setItem('theme', 'light');
+        } else {
+            // Switch to dark mode
+            body.setAttribute('data-theme', 'dark');
+            darkModeIcon.className = 'fas fa-sun';
+            localStorage.setItem('theme', 'dark');
+        }
+    }
+
+    // Load saved theme on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        const savedTheme = localStorage.getItem('theme');
+        const darkModeIcon = document.getElementById('darkModeIcon');
+
+        if (savedTheme === 'dark') {
+            document.body.setAttribute('data-theme', 'dark');
+            darkModeIcon.className = 'fas fa-sun';
+        } else {
+            darkModeIcon.className = 'fas fa-moon';
+        }
+    });
+</script>
+</body>
+</html>

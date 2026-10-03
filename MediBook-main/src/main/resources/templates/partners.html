@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::body})}">
+<head>
+    <title>Our Partners - MediBook</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-8">
+                        <h1 class="display-4 fw-bold mb-4">Our Partners</h1>
+                        <p class="lead">Collaborating with leading healthcare organizations to provide the best care</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Partners Content -->
+        <section class="py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <div class="text-center mb-5">
+                            <h2 class="display-5 fw-bold text-primary">Trusted Healthcare Partners</h2>
+                            <p class="lead text-muted">We work with renowned medical institutions and technology partners to deliver exceptional healthcare services.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hospital Partners -->
+                <div class="row mb-5">
+                    <div class="col-12">
+                        <h3 class="text-center mb-4 text-primary">Hospital Partners</h3>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 text-center">
+                            <div class="card-body">
+                                <i class="fas fa-hospital text-primary" style="font-size: 3rem;"></i>
+                                <h5 class="mt-3">City General Hospital</h5>
+                                <p class="text-muted">Leading general hospital with comprehensive medical services and emergency care.</p>
+                                <div class="mt-3">
+                                    <span class="badge bg-primary">General Medicine</span>
+                                    <span class="badge bg-primary">Emergency Care</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 text-center">
+                            <div class="card-body">
+                                <i class="fas fa-heartbeat text-primary" style="font-size: 3rem;"></i>
+                                <h5 class="mt-3">Cardiac Care Center</h5>
+                                <p class="text-muted">Specialized cardiac care facility with advanced heart treatment technologies.</p>
+                                <div class="mt-3">
+                                    <span class="badge bg-primary">Cardiology</span>
+                                    <span class="badge bg-primary">Cardiac Surgery</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 text-center">
+                            <div class="card-body">
+                                <i class="fas fa-baby text-primary" style="font-size: 3rem;"></i>
+                                <h5 class="mt-3">Children's Medical Center</h5>
+                                <p class="text-muted">Dedicated pediatric care facility providing specialized care for children.</p>
+                                <div class="mt-3">
+                                    <span class="badge bg-primary">Pediatrics</span>
+                                    <span class="badge bg-primary">Child Care</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Technology Partners -->
+                <div class="row mb-5">
+                    <div class="col-12">
+                        <h3 class="text-center mb-4 text-primary">Technology Partners</h3>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 text-center">
+                            <div class="card-body">
+                                <i class="fas fa-microchip text-primary" style="font-size: 3rem;"></i>
+                                <h5 class="mt-3">MedTech Solutions</h5>
+                                <p class="text-muted">Leading provider of medical technology solutions and diagnostic equipment.</p>
+                                <div class="mt-3">
+                                    <span class="badge bg-primary">Medical Devices</span>
+                                    <span class="badge bg-primary">Diagnostics</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 text-center">
+                            <div class="card-body">
+                                <i class="fas fa-cloud text-primary" style="font-size: 3rem;"></i>
+                                <h5 class="mt-3">HealthCloud Inc.</h5>
+                                <p class="text-muted">Cloud-based healthcare data management and analytics platform.</p>
+                                <div class="mt-3">
+                                    <span class="badge bg-primary">Cloud Services</span>
+                                    <span class="badge bg-primary">Data Analytics</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 text-center">
+                            <div class="card-body">
+                                <i class="fas fa-robot text-primary" style="font-size: 3rem;"></i>
+                                <h5 class="mt-3">AI Health Systems</h5>
+                                <p class="text-muted">Artificial intelligence solutions for healthcare diagnosis and treatment.</p>
+                                <div class="mt-3">
+                                    <span class="badge bg-primary">AI Solutions</span>
+                                    <span class="badge bg-primary">Machine Learning</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Insurance Partners -->
+                <div class="row mb-5">
+                    <div class="col-12">
+                        <h3 class="text-center mb-4 text-primary">Insurance Partners</h3>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 text-center">
+                            <div class="card-body">
+                                <i class="fas fa-shield-alt text-primary" style="font-size: 3rem;"></i>
+                                <h5 class="mt-3">HealthGuard Insurance</h5>
+                                <p class="text-muted">Comprehensive health insurance coverage for individuals and families.</p>
+                                <div class="mt-3">
+                                    <span class="badge bg-primary">Health Insurance</span>
+                                    <span class="badge bg-primary">Family Plans</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 text-center">
+                            <div class="card-body">
+                                <i class="fas fa-hand-holding-heart text-primary" style="font-size: 3rem;"></i>
+                                <h5 class="mt-3">CareFirst Medical</h5>
+                                <p class="text-muted">Specialized medical insurance with focus on preventive care.</p>
+                                <div class="mt-3">
+                                    <span class="badge bg-primary">Preventive Care</span>
+                                    <span class="badge bg-primary">Wellness Programs</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 text-center">
+                            <div class="card-body">
+                                <i class="fas fa-user-md text-primary" style="font-size: 3rem;"></i>
+                                <h5 class="mt-3">MediCare Plus</h5>
+                                <p class="text-muted">Senior-focused health insurance with comprehensive coverage options.</p>
+                                <div class="mt-3">
+                                    <span class="badge bg-primary">Senior Care</span>
+                                    <span class="badge bg-primary">Medicare</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Partnership Benefits -->
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <div class="card">
+                            <div class="card-header text-center">
+                                <h3 class="mb-0">
+                                    <i class="fas fa-handshake text-primary"></i> Partnership Benefits
+                                </h3>
+                            </div>
+                            <div class="card-body p-4">
+                                <div class="row g-4">
+                                    <div class="col-md-6">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0">
+                                                <div class="feature-icon" style="width: 50px; height: 50px; margin: 0;">
+                                                    <i class="fas fa-check-circle"></i>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <h5>Quality Assurance</h5>
+                                                <p>All our partners meet strict quality standards and are regularly audited for compliance.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0">
+                                                <div class="feature-icon" style="width: 50px; height: 50px; margin: 0;">
+                                                    <i class="fas fa-sync-alt"></i>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <h5>Seamless Integration</h5>
+                                                <p>Our partners are fully integrated with our platform for smooth patient experience.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0">
+                                                <div class="feature-icon" style="width: 50px; height: 50px; margin: 0;">
+                                                    <i class="fas fa-clock"></i>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <h5>24/7 Support</h5>
+                                                <p>Round-the-clock support from our partner network ensures continuous care.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0">
+                                                <div class="feature-icon" style="width: 50px; height: 50px; margin: 0;">
+                                                    <i class="fas fa-dollar-sign"></i>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <h5>Cost-Effective</h5>
+                                                <p>Competitive pricing through our partner network makes healthcare more affordable.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="py-5" style="background-color: var(--lighter-blue);">
+            <div class="container">
+                <div class="row justify-content-center text-center">
+                    <div class="col-lg-8">
+                        <h2 class="display-5 fw-bold mb-4">Interested in Partnership?</h2>
+                        <p class="lead mb-4">Join our network of healthcare partners and help us provide better care to patients worldwide.</p>
+                        <a href="/contact" class="btn btn-primary btn-lg me-3">
+                            <i class="fas fa-envelope"></i> Contact Us
+                        </a>
+                        <a href="/services" class="btn btn-outline-primary btn-lg">
+                            <i class="fas fa-info-circle"></i> Learn More
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

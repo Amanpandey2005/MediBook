@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::div#bookAppointmentPageContent})}">
+<head>
+    <title>Book Appointment - MediBook</title>
+</head>
+<body>
+    <div th:fragment="bookAppointmentPageContent" id="bookAppointmentPageContent">
+        <div class="container py-4">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-lg-3">
+                    <div class="sidebar">
+                        <h5 class="mb-3">Patient Dashboard</h5>
+                        <nav class="nav flex-column">
+                            <a class="nav-link" href="/patient/dashboard">
+                                <i class="fas fa-tachometer-alt"></i> Dashboard
+                            </a>
+                            <a class="nav-link active" href="/patient/book-appointment">
+                                <i class="fas fa-calendar-plus"></i> Book Appointment
+                            </a>
+                            <a class="nav-link" href="/patient/ai-recommendation">
+                                <i class="fas fa-robot"></i> AI Recommendations
+                            </a>
+                            <a class="nav-link" href="/patient/appointments">
+                                <i class="fas fa-calendar-check"></i> My Appointments
+                            </a>
+                            <a class="nav-link" href="/patient/medications">
+                                <i class="fas fa-pills"></i> My Medications
+                            </a>
+                        </nav>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="col-lg-9">
+                    <h2 class="mb-4">
+                        <i class="fas fa-calendar-plus text-primary"></i> Book New Appointment
+                    </h2>
+
+                    <div th:if="${error}" class="alert alert-danger">
+                        <i class="fas fa-exclamation-circle"></i> <span th:text="${error}">Error occurred</span>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Appointment Details</h5>
+                        </div>
+                        <div class="card-body">
+                            <form th:action="@{/patient/book-appointment}" th:object="${appointment}" method="post">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="doctor" class="form-label">Select Doctor</label>
+                                            <select class="form-select" id="doctor" th:field="*{doctor.id}" required>
+                                                <option value="">Choose a doctor...</option>
+                                                <option th:each="doctor : ${doctors}" 
+                                                        th:value="${doctor.id}" 
+                                                        th:text="${doctor.user.fullName + ' - ' + doctor.specialization}">
+                                                    Dr. John Smith - Cardiology
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="appointmentDateTime" class="form-label">Preferred Date & Time</label>
+                                            <input type="datetime-local" class="form-control" id="appointmentDateTime" 
+                                                   th:field="*{appointmentDateTime}" required>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="reasonForVisit" class="form-label">Reason for Visit</label>
+                                    <textarea class="form-control" id="reasonForVisit" th:field="*{reasonForVisit}" 
+                                              rows="3" placeholder="Please describe the reason for your visit..." required></textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="symptoms" class="form-label">Symptoms (Optional)</label>
+                                    <textarea class="form-control" id="symptoms" name="symptoms" 
+                                              rows="3" placeholder="Describe any symptoms you're experiencing..."></textarea>
+                                </div>
+
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-calendar-check"></i> Book Appointment
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Available Doctors -->
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-user-md text-primary"></i> Available Doctors
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div th:each="doctor : ${doctors}" class="col-md-6 mb-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h6 th:text="${doctor.user.fullName}">Dr. John Smith</h6>
+                                            <p class="text-muted mb-1">
+                                                <strong>Specialization:</strong> <span th:text="${doctor.specialization}">Cardiology</span>
+                                            </p>
+                                            <p class="text-muted mb-1" th:if="${doctor.experienceYears}">
+                                                <strong>Experience:</strong> <span th:text="${doctor.experienceYears}">10</span> years
+                                            </p>
+                                            <p class="text-muted mb-0" th:if="${doctor.bio}">
+                                                <span th:text="${doctor.bio}">Experienced cardiologist with expertise in heart conditions.</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

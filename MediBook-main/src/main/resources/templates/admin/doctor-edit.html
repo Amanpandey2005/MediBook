@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(content=~{::content})}">
+<head>
+    <title>Edit Doctor - MediBook</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <div class="container py-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="mb-0"><i class="fas fa-user-md text-primary"></i> Edit Doctor</h1>
+                <a href="/admin/dashboard" class="btn btn-outline-secondary btn-sm">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <form th:action="@{'/admin/doctor/' + ${doctor.id} + '/edit'}" method="post">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">First Name</label>
+                                <input class="form-control" name="firstName" required th:value="${user.firstName}">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Last Name</label>
+                                <input class="form-control" name="lastName" required th:value="${user.lastName}">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Phone</label>
+                                <input class="form-control" name="phoneNumber" required th:value="${user.phoneNumber}">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Specialization</label>
+                                <input class="form-control" name="specialization" required th:value="${doctor.specialization}">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">License Number</label>
+                                <input class="form-control" name="licenseNumber" required th:value="${doctor.licenseNumber}">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Bio</label>
+                                <textarea class="form-control" name="bio" rows="3" th:text="${doctor.bio}"></textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Experience Years</label>
+                                <input type="number" class="form-control" name="experienceYears" min="0" th:value="${doctor.experienceYears}">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Clinic</label>
+                                <select class="form-select" name="clinic" required>
+                                    <option th:each="c : ${clinics}"
+                                            th:value="${c}"
+                                            th:selected="${doctor.clinic} == ${c}"
+                                            th:text="${c}"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mt-3 d-flex gap-2">
+                            <button class="btn btn-primary">
+                                <i class="fas fa-save"></i> Save Changes
+                            </button>
+                            <a href="/admin/dashboard" class="btn btn-outline-secondary">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
